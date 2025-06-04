@@ -1,0 +1,14 @@
+{
+	"reports-find": {
+		"path": "C:\\Users\\tiedemann\\Messe Berlin GmbH\\Event Services - ES-Veranstaltungsproduktion",
+		"blacklist": "Archiv"
+	},
+	"reports-find-many": {
+		"path": "C:\\Users\\tiedemann\\Messe Berlin GmbH\\Event Services - ES-Veranstaltungsproduktion",
+		"blacklist": "Archiv"
+	},
+	"reports-find-queries": {
+		"path": "C:\\Users\\tiedemann\\Messe Berlin GmbH\\Event Services - ES-Veranstaltungsproduktion",
+		"blacklist": "Archiv"
+	}
+}

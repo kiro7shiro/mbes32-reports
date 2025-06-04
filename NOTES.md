@@ -1,0 +1,6 @@
+- use fuzzy search
+- load db file into memory
+- check basic event files
+    - calculation
+    - orders
+    - bills
