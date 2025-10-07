@@ -1,6 +1,6 @@
 const { Command } = require('commander')
 const program = new Command()
-const { findFiles } = require('../src/reports.js')
+const { findFiles, ERRORS } = require('../src/reports.js')
 const { writeFile } = require('../src/files.js')
 const { 'reports-find': savedOptions } = require('../options.json')
 
@@ -19,10 +19,23 @@ const query = program.args[0]
 const options = Object.assign({ path: process.cwd(), filesQuery: '', blacklist: '', notFoundThreshold: 0.001 }, savedOptions, program.opts())
 const { path, filesQuery, notFoundThreshold } = options
 const blacklist = options.blacklist.split(' ')
-console.log({ query, path, filesQuery, blacklist, notFoundThreshold })
 
-const result = findFiles(path, query, { filesQuery, blacklist, notFoundThreshold })
-if (result.length > 0) {
-	console.table(result, ['name', 'lastModified'])
-	writeFile(process.cwd() + '\\report.xlsx', result).then(_ => console.log('saved')).catch(err => console.error(err))
+try {
+	console.log('findFiles')
+	const { files } = findFiles(path, query, { filesQuery, blacklist, notFoundThreshold })
+	console.table(files, ['name', 'lastModified'])
+	writeFile(process.cwd() + '\\report.xlsx', files)
+		.then((_) => console.log('saved'))
+		.catch((err) => console.error(err))
+} catch (error) {
+	if (
+		error instanceof ERRORS.FolderEmpty ||
+		error instanceof ERRORS.NoFilesFound ||
+		error instanceof ERRORS.NoFolderFound ||
+		error instanceof ERRORS.PathEmpty
+	) {
+		console.log(error.message)
+	} else {
+		console.error(error)
+	}
 }

@@ -8,5 +8,6 @@ program
 	.description('Manager for mbes32 files')
 	.version('1.0.0')
 	.command('find', 'Search for files')
+	.command('find-many', 'Search for multiple files')
 
 program.parse(process.argv)
