@@ -1,111 +1,212 @@
 const path = require('path')
 const fs = require('fs')
 const Fuse = require('fuse.js')
-const { listFiles, makeQueries } = require('./files.js')
+const { listFiles, readFile, writeFile } = require('./files.js')
+const { Matchcode } = require('./Matchcode.js')
+const { EventFile } = require('./EventFile.js')
 
-const ERRORS = {
-	PathEmpty: class PathEmpty extends Error {
-		constructor() {
-			super('The search path is empty.')
-		}
-	},
-	FolderEmpty: class FolderEmpty extends Error {
-		constructor(folder) {
-			super(`Folder: ${folder} is empty.`)
-			this.folder = folder
-		}
-	},
-	NoFolderFound: class NoFolderFound extends Error {
-		constructor(query) {
-			super(`No folder found that matches the query: "${query}"`)
-			this.query = query
-		}
-	},
-	NoFilesFound: class NoFilesFound extends Error {
-		constructor(query, filesQuery) {
-			super(`No files found for ${query}, that macht the query: "${filesQuery}"`)
-			this.query = query
-			this.filesQuery = filesQuery
-		}
-	}
+class ReportError {
+    constructor(message) {
+        this.message = message
+    }
+}
+class SearchDirectoryEmpty extends ReportError {
+    constructor(searchPath) {
+        super(`The search directory: ${searchPath} is empty.`)
+    }
+}
+class NoDirectoryFound extends ReportError {
+    constructor(query) {
+        super(`No directory found that matches the query: "${query}"`)
+        this.query = query
+    }
+}
+class DirectoryEmpty extends ReportError {
+    constructor(directory) {
+        super(`Directory: ${directory} is empty.`)
+        this.directory = directory
+    }
+}
+
+class NoFilesFound extends ReportError {
+    constructor(directory, filesQuery) {
+        super(`No files found for: ${directory}, that match the filesQuery: "${filesQuery}"`)
+        this.directory = directory
+        this.filesQuery = filesQuery
+    }
+}
+
+class Errors {
+    static SearchDirectoryEmpty = SearchDirectoryEmpty
+    static NoDirectoryFound = NoDirectoryFound
+    static DirectoryEmpty = DirectoryEmpty
+    static NoFilesFound = NoFilesFound
 }
 
 /**
- * Search for a folder that matches the query in the specified path.
- * Returns files inside the folder filtered based on the files query.
+ * Search for files inside a directory that match the query in the search path.
+ * Returns files inside the directory filtered based on the files query.
+ * @param {String} searchPath - the path in which to search for the directory
+ * @param {String} query - the query to search for a directory
+ * @param {Object} [options] - options
+ * @param {String} [options.filesQuery] - the query to search for files inside the directory
+ * @param {String[]} [options.blacklist] - list of directories to exclude from the search
+ * @param {Number} [options.notFoundThreshold] - threshold for searching, if an item scores above the threshold it is considered not found
+ * @returns {Object} - an object with properties `directory` and `files`
  */
-function findFiles(basePath, query, { filesQuery = '', blacklist = [], notFoundThreshold = 0.001 } = {}) {
-	// search for an folder that matches the query
-	const folders = fs.readdirSync(basePath)
-	if (folders.length === 0) throw new ERRORS.PathEmpty()
-	const searchFolders = new Fuse(folders, { includeScore: true })
-	const findFolders = searchFolders.search(query).filter(function (folder) {
-		return folder.score < notFoundThreshold
-	})
-	if (findFolders.length === 0) throw new ERRORS.NoFolderFound(query)
-	// take the first found item as the requested folder
-	const foundFolder = findFolders[0].item
-	console.log(`searching in folder: ${foundFolder}...`)
-	const files = listFiles(`${basePath}\\${foundFolder}`, { blacklist })
-	if (files.length === 0) throw new ERRORS.FolderEmpty(foundFolder)
-	// search for files
-	if (filesQuery === '') {
-		console.log(`found ${files.length} files...`)
-		return files
-	}
-	const searchFiles = new Fuse(files, { includeScore: true, useExtendedSearch: true, keys: ['filepath'] })
-	const findFiles = searchFiles
-		.search(filesQuery)
-		.filter(function (file) {
-			return file.score < notFoundThreshold
-		})
-		.map(function (file) {
-			return { name: file.item.filename, path: file.item.filepath, lastModified: file.item.lastModified, refIndex: file.refIndex, score: file.score }
-		})
+function findFiles(searchPath, query, { filesQuery = '', blacklist = [], notFoundThreshold = 0.001 } = {}) {
+    // search for an directory that matches the query
+    const directories = fs.readdirSync(searchPath)
+    if (directories.length === 0) throw new Errors.SearchDirectoryEmpty(searchPath)
+    const searchDirectories = new Fuse(directories, { includeScore: true })
+    const findDirectories = searchDirectories.search(query).filter(function (directory) {
+        return directory.score < notFoundThreshold
+    })
+    if (findDirectories.length === 0) throw new Errors.NoDirectoryFound(query)
+    // take the first found item as the requested directory
+    const foundDirectory = findDirectories[0].item
+    console.log(`searching in directory: ${foundDirectory}...`)
+    const files = listFiles(path.join(searchPath, foundDirectory), { blacklist })
+    if (files.length === 0) throw new Errors.DirectoryEmpty(foundDirectory)
+    // search for files
+    if (filesQuery === '') {
+        console.log(`found ${files.length} files...`)
+        return { directory: foundDirectory, files }
+    }
+    const searchFiles = new Fuse(files, { includeScore: true, useExtendedSearch: true, keys: ['filepath', 'filename'] })
+    const findFiles = searchFiles
+        .search(filesQuery)
+        .filter(function (file) {
+            return file.score < notFoundThreshold
+        })
+        .map(function (file) {
+            return {
+                filename: file.item.filename,
+                filepath: file.item.filepath,
+                lastModified: file.item.lastModified,
+                refIndex: file.refIndex,
+                score: file.score
+            }
+        })
 
-	if (findFiles.length === 0) throw new ERRORS.NoFilesFound(query, filesQuery)
-	console.log(`found ${findFiles.length} files...`)
-	return { folder: foundFolder, files: findFiles }
+    if (findFiles.length === 0) throw new Errors.NoFilesFound(foundDirectory, filesQuery)
+    console.log(`found ${findFiles.length} files...`)
+    return { directory: foundDirectory, files: findFiles }
 }
 
-async function findManyFiles(
-	basePath,
-	queriesFile,
-	{ matchcodeIndex = 1, subfolders = ['009_Reinigung'], files = ['.xlsx'], blacklist = [], notFoundThreshold = 0.01 } = {}
+/**
+ * Search for multiple files based on a list of queries.
+ * @param {String} searchPath - the path in which to search for the files
+ * @param {String} queriesFile - the path to a file containing the queries
+ * @param {Object} [options] - options
+ * @param {String} [options.filesQuery] - the query to search for files inside the directory
+ * @param {String[]} [options.blacklist] - list of directories to exclude from the search
+ * @param {Number} [options.notFoundThreshold] - threshold for searching, if an item scores above the threshold it is considered not found
+ * @returns {Object} - an object with properties `results` and `errors`, where `results` contains the found files and `errors` contains errors
+ */
+async function findManyFiles(searchPath, queriesFile, { filesQuery = '', blacklist = [], notFoundThreshold = 0.01 } = {}) {
+    // TODO : make function accept queries argument as an array of query objects or a filepath which will be parsed
+    const queries = await makeQueries(path.join(process.cwd(), queriesFile), { filesQuery })
+    console.log(`made ${queries.length} queries...`)
+    const results = []
+    const errors = []
+    for (let qCnt = 0; qCnt < queries.length; qCnt++) {
+        const query = queries[qCnt]
+        const { matchcode, filesQuery } = query
+        try {
+            const { directory, files } = findFiles(searchPath, matchcode.base, { filesQuery, blacklist, notFoundThreshold })
+            results.push({ directory, files, query })
+        } catch (error) {
+            if (error instanceof Errors.SearchDirectoryEmpty) throw error
+            if (error instanceof Errors.DirectoryEmpty || error instanceof Errors.NoDirectoryFound || error instanceof Errors.NoFilesFound) {
+                console.log(error.message)
+                errors.push({ error, query })
+            } else {
+                throw error
+            }
+        }
+    }
+    return { results, errors }
+}
+
+async function makeQueries(
+    file,
+    {
+        filesQuery = '',
+        queriesFileConfig = {
+            worksheet: 'queries',
+            type: 'list',
+            row: 1,
+            columns: [
+                { index: 1, key: 'matchcode' },
+                { index: 2, key: 'filesQuery' }
+            ]
+        }
+    } = {}
 ) {
-	const queries = await makeQueries(path.resolve(process.cwd(), queriesFile), { matchcodeIndex, subfolders, files })
-	console.log(`made ${queries.length} queries...`)
-	const result = []
-	const errors = []
-	for (let qCnt = 0; qCnt < queries.length; qCnt++) {
-		const query = queries[qCnt]
-		const { matchcode, filesQuery } = query
-		try {
-			const { folder, files: foundFiles } = findFiles(basePath, matchcode.base, { filesQuery, blacklist, notFoundThreshold })
-			result.push({ folder, files: foundFiles, query })
-		} catch (error) {
-			if (
-				error instanceof ERRORS.FolderEmpty ||
-				error instanceof ERRORS.NoFilesFound ||
-				error instanceof ERRORS.NoFolderFound ||
-				error instanceof ERRORS.PathEmpty
-			) {
-				console.log(error.message)
-				errors.push({ error, query })
-			} else {
-				throw error
-			}
-		}
-	}
-	return { files: result, errors }
+    const rows = await readFile(file, queriesFileConfig)
+    const queries = rows.map(function (row) {
+        return {
+            matchcode: new Matchcode(row.matchcode),
+            filesQuery: row.filesQuery || filesQuery
+        }
+    })
+    return queries
 }
 
-function writeReport(folder, files) {
-	
+async function writeReport(
+    filepath,
+    results,
+    errors,
+    reportConfig = {
+        files: {
+            type: 'list',
+            worksheet: 'files',
+            row: 1,
+            columns: [
+                { index: 1, key: 'filepath' },
+                { index: 2, key: 'filename' },
+                { index: 3, key: 'lastModified' },
+                { index: 4, key: 'type' },
+                { index: 5, key: 'contractor' }
+            ]
+        },
+        errors: {
+            type: 'list',
+            worksheet: 'errors',
+            row: 1,
+            columns: [
+                { index: 1, key: 'filepath' },
+                { index: 2, key: 'filename' },
+                { index: 3, key: 'lastModified' }
+            ]
+        }
+    }
+) {
+    // parse files into EventFiles
+    for (let rCnt = 0; rCnt < results.length; rCnt++) {
+        const { directory, files } = results[rCnt]
+        const eventFiles = files.map((file) => new EventFile(file))
+        const fileConfig = Object.assign({}, reportConfig.files, { worksheet: directory })
+        await writeFile(filepath, eventFiles, fileConfig)
+    }
+    if (errors.length > 0) {
+        const eventErrors = errors.map(function ({ error, query }) {
+            return {
+                matchcode: query.matchcode.raw,
+                error: error.constructor.name,
+                message: error.message,
+                filesQuery: query.filesQuery
+            }
+        })
+        await writeFile(filepath, eventErrors, reportConfig.errors)
+    }
 }
 
 module.exports = {
-	ERRORS,
-	findFiles,
-	findManyFiles
+    Errors,
+    findFiles,
+    findManyFiles,
+    makeQueries,
+    writeReport
 }
