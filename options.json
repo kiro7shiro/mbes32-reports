@@ -1,11 +1,10 @@
 {
 	"reports-find": {
-		"path": "C:\\Users\\tiedemann\\Messe Berlin GmbH\\Event Services - ES-Veranstaltungsproduktion",
+		"directory": "..\\test\\data",
 		"blacklist": "Archiv"
 	},
 	"reports-find-many": {
-		"path": "C:\\Users\\tiedemann\\Messe Berlin GmbH\\Event Services - ES-Veranstaltungsproduktion",
-		"blacklist": "Archiv",
-		"reportTemplate": "G:\\ES3\\Abteilung\\ES32\\Reinigung\\Rechnungsvorlagen+Layout\\2025\\ES 32\\MATCH_ES-TO-CDS_Checkliste_NN_YYYYMMDD.xlsx"
+		"directory": "..\\test\\data",
+		"blacklist": "Archiv"
 	}
 }
