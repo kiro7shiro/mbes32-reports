@@ -30,6 +30,8 @@ async function getFile(filepath, { create = true } = {}) {
         if (cache.workbook === null) cache.workbook = new ExcelJS.Workbook()
         if (fileExists === true) {
             await cache.workbook.xlsx.readFile(filepath)
+        } else {
+            cache.workbook = new ExcelJS.Workbook()
         }
         cache.workbookName = filepath
     }
@@ -59,7 +61,7 @@ async function writeFile(
     },
     { mode = 'overwrite' } = {}
 ) {
-    // read the file
+    // open file
     const workbook = await getFile(filepath)
     // validate config and use results as flags
     const isConfig = validateConfig(fileConfig)
