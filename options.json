@@ -1,10 +1,10 @@
 {
 	"reports-find": {
-		"directory": "..\\test\\data",
+		"directory": "C:/Users/tiedemann/Development/mbes32-reports",
 		"blacklist": "Archiv"
 	},
 	"reports-find-many": {
-		"directory": "..\\test\\data",
+		"directory": "C:/Users/tiedemann/Development/mbes32-reports",
 		"blacklist": "Archiv"
 	}
 }

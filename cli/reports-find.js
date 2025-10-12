@@ -26,7 +26,7 @@ try {
 	console.log('findFiles')
 	const { files } = findFiles(directory, query, { filesQuery, blacklist, notFoundThreshold })
 	console.table(files)
-	writeFile(path.join(process.cwd(), '/report.xlsx'), files)
+	writeFile(path.join(process.cwd(), '../report.xlsx'), files)
 		.then((_) => console.log('saved'))
 		.catch((err) => console.error(err))
 } catch (error) {

@@ -27,7 +27,7 @@ async function main() {
         const { results, errors } = await findManyFiles(directory, queries, { filesQuery, blacklist, notFoundThreshold })
         console.log(`files: ${results.length}`)
         console.log(`errors: ${errors.length}`)
-        await writeReport(path.join(process.cwd(), '../data/report.xlsx'), results, errors)
+        await writeReport(path.join(process.cwd(), '../report.xlsx'), results, errors)
         console.log('saved')
     } catch (error) {
         console.error(error)
