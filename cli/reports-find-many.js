@@ -8,7 +8,6 @@ program.description('Search folder that matches a query from the list and search
 
 program.argument('queries', 'A string pointing to a excel file containing the queries')
 
-// TODO : rename path into directory
 program.option('-d, --directory <directory>', 'The directory to search the folders in.')
 program.option('-fq, --files-query <filesQuery>', 'The query to find files inside the folder.')
 program.option('-b, --blacklist <blacklist>', 'List of folders to exclude from the search of files.')

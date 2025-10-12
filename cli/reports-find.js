@@ -9,7 +9,6 @@ program.description('Search a folder that matches the query in the specified pat
 
 program.argument('<query>', 'search query')
 
-// TODO : rename path into directory
 program.option('-d, --directory <directory>', 'The directory to search the folders in.')
 program.option('-fq, --files-query <filesQuery>', 'The query to find files inside the folder.')
 program.option('-b, --blacklist <blacklist>', 'List of folders to exclude from the search of files.')

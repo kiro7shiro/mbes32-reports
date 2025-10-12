@@ -67,7 +67,7 @@ async function writeFile(
     const isConfig = validateConfig(fileConfig)
     const isMultiConfig = validateMultiConfig(fileConfig)
     if (!isConfig && !isMultiConfig) {
-        // TODO : throw error
+        // TODO : throw error for invalid configs
     }
     if (isMultiConfig) {
         // write a multi config into a file
@@ -92,7 +92,7 @@ async function writeFile(
         }
         // write object or list
         if (fileConfig.type === 'object') {
-            // TODO : write object data
+            // TODO : write object data into file
         } else {
             if (mode === 'overwrite') {
                 // write list header
@@ -105,13 +105,13 @@ async function writeFile(
                 }
             } else {
                 // append list data
-                // TODO : check endRow
+                // TODO : get endRow
                 for (let dIndex = 0; dIndex < data.length; dIndex++) {
                     worksheet.addRow(Object.values(data[dIndex]))
                 }
             }
         }
-        // TODO : save file
+        // save file
         await workbook.xlsx.writeFile(filepath)
     }
 }
@@ -139,7 +139,7 @@ async function readFile(filepath, fileConfig = null) {
         }
         // read data
         const startRow = fileConfig === null ? 1 : fileConfig.row
-        // TODO : select endRow
+        // TODO : get endRow
         const rows = worksheet.getRows(startRow, worksheet.lastRow.number)
         if (fileConfig === null) return rows
         // parse objects
