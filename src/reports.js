@@ -1,7 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 const Fuse = require('fuse.js')
-const { listFiles, readFile, writeFile } = require('./files.js')
+const { parse, serialize } = require('xlsx-fuzzyparser')
+const { listFiles } = require('./listFiles.js')
 const { Matchcode } = require('./Matchcode.js')
 const { EventFile } = require('./EventFile.js')
 
@@ -130,7 +131,7 @@ async function findManyFiles(searchPath, queriesFile, { filesQuery = '', blackli
 }
 
 async function makeQueries(
-    file,
+    filepath,
     {
         filesQuery = '',
         queriesFileConfig = {
@@ -144,7 +145,7 @@ async function makeQueries(
         }
     } = {}
 ) {
-    const rows = await readFile(file, queriesFileConfig)
+    const rows = await parse(filepath, queriesFileConfig)
     const queries = rows.map(function (row) {
         return {
             matchcode: new Matchcode(row.matchcode),
@@ -188,7 +189,7 @@ async function writeReport(
         const { directory, files } = results[rCnt]
         const eventFiles = files.map((file) => new EventFile(file))
         const fileConfig = Object.assign({}, reportConfig.files, { worksheet: directory })
-        await writeFile(filepath, eventFiles, fileConfig)
+        await serialize(eventFiles, filepath, fileConfig)
     }
     if (errors.length > 0) {
         const eventErrors = errors.map(function ({ error, query }) {
@@ -199,7 +200,7 @@ async function writeReport(
                 filesQuery: query.filesQuery
             }
         })
-        await writeFile(filepath, eventErrors, reportConfig.errors)
+        await serialize(eventErrors, filepath, reportConfig.errors)
     }
 }
 
