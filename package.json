@@ -12,10 +12,11 @@
   "dependencies": {
     "commander": "^12.1.0",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "exceljs": "^4.4.0",
     "express": "^5.1.0",
+    "frappe-gantt": "^1.0.4",
     "fuse.js": "^7.0.0",
-    "mbes32-gantt": "github:kiro7shiro/mbes32-gantt",
     "terminal-kit": "^3.1.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "xlsx-fuzzyparser": "github:kiro7shiro/xlsx-fuzzyparser"

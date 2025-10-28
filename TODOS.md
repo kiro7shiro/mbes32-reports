@@ -1,7 +1,2 @@
-- use fuzzy search
-- load db file into memory
-- check basic event files type
-    - calculation
-    - orders
-    - bills
-- define a location for saving the main data files, eventsData, eventsTodos, etc.
+- [ ] write a update function for eventsData
+- [ ] integrate eventTodos

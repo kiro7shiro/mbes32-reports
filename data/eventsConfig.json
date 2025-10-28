@@ -1,0 +1,18 @@
+{
+    "worksheet": "events",
+    "type": "list",
+    "row": 2,
+    "columns": [
+        { "index": 1, "key": "matchcode" },
+        { "index": 2, "key": "name" },
+        { "index": 3, "key": "start" },
+        { "index": 4, "key": "setup" },
+        { "index": 5, "key": "eventStart" },
+        { "index": 6, "key": "eventEnd" },
+        { "index": 7, "key": "dismantle" },
+        { "index": 8, "key": "end" },
+        { "index": 9, "key": "halls" },
+        { "index": 10, "key": "type" },
+        { "index": 11, "key": "kind" }
+    ]
+}

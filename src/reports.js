@@ -106,7 +106,7 @@ function findFiles(searchPath, query, { filesQuery = '', blacklist = [], notFoun
  * @returns {Object} - an object with properties `results` and `errors`, where `results` contains the found files and `errors` contains errors
  */
 async function findManyFiles(searchPath, queriesFile, { filesQuery = '', blacklist = [], notFoundThreshold = 0.01 } = {}) {
-    // TODO : make function accept queries argument as an array of query objects or a filepath which will be parsed
+    // [ ] : make function accept queries argument as an array of query objects or a filepath which will be parsed
     const queries = await makeQueries(path.join(process.cwd(), queriesFile), { filesQuery })
     console.log(`made ${queries.length} queries...`)
     const results = []
@@ -154,6 +154,7 @@ async function makeQueries(
     })
     return queries
 }
+
 
 async function writeReport(
     filepath,
