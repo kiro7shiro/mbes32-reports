@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const path = require('path')
 const express = require('express')
-const crypto = require('crypto')
 
 const app = express()
 app.use(express.json())
@@ -24,23 +23,6 @@ app.locals.settings = {
             const duration = data.end - data.start
             const days = Math.floor(duration / (1000 * 60 * 60 * 24))
             return days >= 364
-        }
-    ],
-    eventDataParsers: [
-        function (data) {
-            data.id = crypto.randomUUID()
-            data.setup = data.setup ?? data.start
-            data.eventStart = data.eventStart ?? data.start
-            data.eventEnd = data.eventEnd ?? data.start
-            data.dismantle = data.dismantle ?? data.start
-            data.end = data.end ?? data.start
-            data.halls = data.halls ? data.halls.split(',').map((h) => h.trim()) : []
-            data.times = {
-                setup: Math.abs(data.start.getTime() - data.setup.getTime()),
-                event: Math.abs(data.eventStart.getTime() - data.eventEnd.getTime()),
-                duration: Math.abs(data.start.getTime() - data.end.getTime())
-            }
-            return data
         }
     ]
 }

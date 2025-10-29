@@ -1,6 +1,4 @@
-const path = require('path')
 const { Command } = require('commander')
-const { parse, serialize } = require('xlsx-fuzzyparser')
 const { 'reports-start': savedOptions } = require('../options.json')
 
 const app = require('../app/app.js')
@@ -15,25 +13,9 @@ const options = Object.assign({ port: 5500 }, savedOptions, program.opts())
 const { port } = options
 
 async function main() {
-    // what do you wanna show on screen ?
-    // event progress bar
-    // event infos
-    // event todos/ checklist
-    // save new todos
-    // edit existing todos
-
-    /* const sourceFile = path.join(process.cwd(), '../data/TPK-Liste mit ESPK.xlsx')
-    const sourceConfig = path.join(process.cwd(), '../data/eventsDataConfig.json')
-    const eventsFile = path.join(process.cwd(), '../data/events.xlsx')
-    const eventsConfig = path.join(process.cwd(), '../data/eventsConfig.json')
-    const sourceData = await parse(sourceFile, sourceConfig)
-    await serialize(sourceData, eventsFile, {config:eventsConfig})
-    console.log('saved') */
-
     const server = app.listen(port, function () {
         console.log(`server started on port: ${port}`)
     })
-
     // process manager
     function terminate() {
         server.close()

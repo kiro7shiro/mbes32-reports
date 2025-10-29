@@ -9,13 +9,7 @@ router.get('/', async function (req, res) {
     const { eventsFile, eventsConfig, eventsBlacklist, eventDataParsers } = req.app.locals.settings
     const eventsData = await parse(eventsFile, eventsConfig)
     const filtered = eventsData.filter((eventData) => !eventsBlacklist.some((predicate) => predicate(eventData)))
-    const parsed = filtered.map(function (eventData) {
-        for (const parser of eventDataParsers) {
-            eventData = parser(eventData)
-        }
-        return eventData
-    })
-    res.json(parsed)
+    res.json(filtered)
 })
 
 // GET /items/:id
