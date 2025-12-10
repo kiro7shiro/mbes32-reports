@@ -9,7 +9,7 @@ program.option('-p, --port <port>', 'The port to start the server on.')
 
 program.parse(process.argv)
 
-const options = Object.assign({ port: 5500 }, savedOptions, program.opts())
+const options = Object.assign(savedOptions, program.opts())
 const { port } = options
 
 async function main() {

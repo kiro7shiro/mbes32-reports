@@ -1,3 +1,5 @@
+// TODO :
+// [ ] : show a list of todos for the event
 // [ ] : show a map of the messe gelände
 import { Control } from './Control.js'
 
@@ -19,8 +21,8 @@ export class EventInfos {
         this.container = control.container
         this.infos = infos
     }
-    async render(infos) {
-        const data = Object.assign({}, EventInfos.defaults, this.infos, infos)
+    async render(eventData) {
+        const data = Object.assign({}, EventInfos.defaults, this.infos, eventData)
         const html = await this.control.render(data)
         return html
     }

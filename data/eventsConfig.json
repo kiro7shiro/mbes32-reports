@@ -1,18 +1,22 @@
 {
     "worksheet": "events",
     "type": "list",
-    "row": 2,
+    "row": 1,
     "columns": [
-        { "index": 1, "key": "matchcode" },
-        { "index": 2, "key": "name" },
-        { "index": 3, "key": "start" },
-        { "index": 4, "key": "setup" },
-        { "index": 5, "key": "eventStart" },
-        { "index": 6, "key": "eventEnd" },
-        { "index": 7, "key": "dismantle" },
-        { "index": 8, "key": "end" },
-        { "index": 9, "key": "halls" },
-        { "index": 10, "key": "type" },
-        { "index": 11, "key": "kind" }
+        { "index": 4, "key": "matchcode" },
+        { "index": 5, "key": "name" },
+        { "index": 6, "key": "start" },
+        { "index": 7, "key": "setup" },
+        { "index": 8, "key": "eventStart" },
+        { "index": 9, "key": "eventEnd" },
+        { "index": 10,"key": "dismantle" },
+        { "index": 11,"key": "end" },
+        { "index": 12,"key": "status" },
+        { "index": 13, "key": "type" },
+        { "index": 14, "key": "kind" },
+        { "index": 15, "key": "account" },
+        { "index": 16, "key": "manager" },
+        { "index": 18, "key": "espk" },
+        { "index": 19,"key": "halls" }
     ]
 }

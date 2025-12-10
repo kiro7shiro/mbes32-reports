@@ -10,6 +10,6 @@ program
     .command('find', 'Search for files.')
     .command('find-many', 'Search for multiple files.')
     .command('start', 'Start application server.')
-    .command('update', 'Update data.')
+    //.command('update', 'Update data.')
 
 program.parse(process.argv)

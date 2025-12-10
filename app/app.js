@@ -27,7 +27,7 @@ app.locals.settings = {
     ]
 }
 app.use('/src', express.static(path.join(__dirname, 'src')))
-app.use('/data', require('../api/eventsData.js'))
+app.use('/data', require('../api/data.js'))
 app.use('/controls', require('../api/controls.js'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '../node_modules/frappe-gantt/dist')))
