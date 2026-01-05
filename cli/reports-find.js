@@ -55,6 +55,7 @@ async function main() {
 	try {
 		console.log('[findFiles]')
 		const { files } = findFiles(searchPath, query, { filesQuery, blacklist, directoriesEngine, filesEngine })
+		console.table(files, ['filename'])
 		await serialize(files, path.join(process.cwd(), '../data/report.xlsx'))
 		console.log('saved')
 	} catch (error) {
