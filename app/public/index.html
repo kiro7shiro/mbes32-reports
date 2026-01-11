@@ -1,66 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>gantt</title>
-		<!-- frappe gantt -->
-		<script src="frappe-gantt.umd.js"></script>
-		<link rel="stylesheet" href="frappe-gantt.css" />
-		<!-- w3css template -->
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-		<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css" />
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-		<!-- mbes323-reports styles -->
-		<link rel="stylesheet" href="style.css" />
-		<style>
-			html,
-			body,
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6 {
-				font-family: 'Roboto', sans-serif;
-			}
 
-			.w3-sidebar {
-				z-index: 3;
-				width: 250px;
-				top: 43px;
-				bottom: 0;
-				height: inherit;
-			}
-		</style>
-	</head>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>es-to-cds</title>
+    <!-- frappe gantt -->
+    <script src="frappe-gantt.umd.js"></script>
+    <link rel="stylesheet" href="frappe-gantt.css" />
+    <!-- w3css template -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- mbes323-reports styles -->
+    <link rel="stylesheet" href="style.css" />
+    <style>
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Roboto', sans-serif;
+}
 
-	<body>
-		<div id="app" class="w3-main w3-theme-l4">
-			<!-- menu -->
-			<div class="w3-row">
-				<div id="menuBar" class="w3-bar w3-theme w3-left-align w3-large"></div>
-			</div>
-			<!-- workspace -->
-			<div class="w3-row">
-				<div class="w3-half w3-container">
-					<h3 class="w3-text-theme">Gantt</h3>
-					<div id="ganttChart"></div>
-				</div>
-				<div class="w3-half w3-container">
-					<div class="w3-row">
-						<h3 class="w3-text-theme">Event</h3>
-						<div id="eventInfos"></div>
-					</div>
-					<div class="w3-row">
-						<div id="eventTodos"></div>
-					</div>
-				</div>
-			</div>
-			&nbsp;
-		</div>
-		<!-- logic -->
-		<script type="module" src="index.js"></script>
-	</body>
+.w3-sidebar {
+    z-index: 3;
+    width: 250px;
+    top: 43px;
+    bottom: 0;
+    height: inherit;
+}
+
+    </style>
+</head>
+
+<body>
+    <div id="app" class="w3-main w3-theme-l4">
+        <!-- menu -->
+        <div class="w3-row">
+            <div id="menuBar" class="w3-bar w3-theme w3-left-align w3-large"></div>
+            
+        </div>
+        <!-- dialogs -->
+        <div id="mergeFiles" class="w3-modal">
+            <div class="w3-modal-content"></div>
+        </div>
+        <!-- workspace -->
+        <div class="w3-row">
+            <div class="w3-half w3-container">
+                <h3 class="w3-text-theme">Gantt</h3>
+                <div id="ganttChart"></div>
+            </div>
+            <div class="w3-half w3-container">
+                <div class="w3-row">
+                    <h3 class="w3-text-theme">Event</h3>
+                    <div id="eventInfos"></div>
+                </div>
+                <div class="w3-row">
+                    <div id="eventTodos"></div>
+                </div>
+            </div>
+        </div>
+        &nbsp;
+    </div>
+    <!-- logic -->
+    <script type="module" src="index.js"></script>
+</body>
+
 </html>

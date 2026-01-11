@@ -38,6 +38,12 @@ export class Control {
     dispatchEvent(event) {
         this.container.dispatchEvent(event)
     }
+    show() {
+        this.container.style.display = 'block'
+    }
+    hide() {
+        this.container.style.display = 'none'
+    }
     async render(data = null) {
         if (data === null) {
             data = this.data

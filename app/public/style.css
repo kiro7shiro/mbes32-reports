@@ -1,22 +1,18 @@
-.upload-button {
-    position: relative;
-    display: inline-block;
-}
-
-.upload-button input[type='file'] {
+#mergeFiles {
+    width: 500px;
+    height: fit-content;
     position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    z-index: 1;
-    cursor: pointer;
+    left: 35%;
+    top: 40%;
+    padding-top: 0px;
 }
 
-.upload-button label {
-    position: relative;
-    z-index: 0;
-    border: none;
-    border-radius: 5px;
+#mergeFiles input[type='file'] {
+    display: none;
+}
+
+#mergeFiles label {
+    display: inline-block;
     cursor: pointer;
 }
 

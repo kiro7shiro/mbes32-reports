@@ -1,0 +1,32 @@
+<div class="w3-container w3-card-4 w3-theme">
+    <span data-event="click" data-action="close" class="w3-button w3-display-topright">&times;</span>
+    <header class="w3-container w3-theme">
+        <h1>Select files</h1>
+    </header>
+    <div class="w3-container w3-theme-l4">
+        <div style="display: flex;">
+            <input class="w3-input" type="text"></input>
+            <div class="w3-button w3-black w3-hover-white">
+                <label for="file1">
+                    <input type="file" id="file1" data-event="change" data-action="file1" />
+                    File1
+                </label>
+            </div>
+        </div>
+        <div style="display: flex;">
+            <input class="w3-input" type="text"></input>
+            <div class="w3-button w3-black w3-hover-white">
+                <label for="file2">
+                    <input type="file" id="file2" data-event="change" data-action="file2" />
+                    File2
+                </label>
+            </div>
+        </div>
+    </div>
+    <footer class="w3-container w3-theme">
+        <div style="display: flex;justify-content: center;">
+            <button class="w3-button" data-event="click" data-action="cancel">cancel</button>
+            <button class="w3-button" data-event="click" data-action="ok">ok</button>
+        </div>
+    </footer>
+</div>
