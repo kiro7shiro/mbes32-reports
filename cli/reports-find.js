@@ -54,12 +54,12 @@ program.addOption(
 )
 
 program.parse()
-const query = program.args[0]
+const query = program.processedArgs[0]
 const options = program.opts()
 
-console.log(directoriesEngine)
+/* console.log(directoriesEngine)
 console.log(filesEngine)
-console.log(options)
+console.log(options) */
 
 const { searchPath, filesQuery, blacklist, report } = options
 
@@ -69,7 +69,7 @@ async function main() {
         const { files } = findFiles(searchPath, query, { filesQuery, blacklist, directoriesEngine, filesEngine })
         console.table(files, ['filename'])
         await serialize(files, report)
-        console.log('saved')
+        console.log(`saved as: ${report}`)
     } catch (error) {
         if (
             error instanceof Errors.SearchDirectoryEmpty ||
@@ -84,4 +84,4 @@ async function main() {
     }
 }
 
-//main()
+main()
