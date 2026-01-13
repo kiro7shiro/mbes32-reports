@@ -3,11 +3,38 @@
         <h1><%= matchcode %></h1>
     </header>
     <div class="w3-container w3-theme-l5">
+        <p>Titel:</p>
         <p><%= name %></p>
-        <p>Begin: <%= new Date(start).toLocaleDateString() %></p>
-        <p>End: <%= new Date(end).toLocaleDateString() %></p>
+        <p>Zeitstrahl:</p>
+    </div>
+    <div class="w3-container w3-theme-l5" style="display: flex;gap: 8px;">
+        <p>Start: <%= new Date(start).toLocaleDateString() %></p>
+        <p>Aufbau: <%= new Date(setup).toLocaleDateString() %></p>
+        <p>Begin: <%= new Date(eventStart).toLocaleDateString() %></p>
+        <p>Ende: <%= new Date(eventEnd).toLocaleDateString() %></p>
+        <p>Abbau: <%= new Date(dismantle).toLocaleDateString() %></p>
+        <p>Ende: <%= new Date(end).toLocaleDateString() %></p>
+    </div>
+    <div class="w3-container w3-theme-l5">
         <p>Hallen:</p>
         <p><%= halls.join(', ') %></p>
+    </div>
+    <div class="w3-container w3-theme-l5">
+        <p>Dateien:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for( let fCnt = 0; fCnt < files.length; fCnt++ ) { %>
+                <tr class="w3-hover-black">
+                    <td><%= files[fCnt].filename %></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
     </div>
     <footer class="w3-container w3-theme">&nbsp;</footer>
 </div>

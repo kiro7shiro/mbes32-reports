@@ -1,28 +1,22 @@
 // TODO :
+// [ ] : show a list of files for the event
 // [ ] : show a list of todos for the event
 // [ ] : show a map of the messe gelände
 import { Control } from './Control.js'
+import { EventData } from './EventData.js'
 
 export class EventInfos {
-    static defaults = {
-        matchcode: 'event-infos-matchcode',
-        id: 'event-infos-id',
-        name: 'event-infos-name',
-        start: new Date(),
-        end: new Date(),
-        halls: []
+    static async build({ eventData = EventData.Defaults, template = 'EventInfos', container = 'div' } = {}) {
+        const control = await Control.build(template, eventData, container)
+        return new EventInfos(control, eventData)
     }
-    static async build({ infos = EventInfos.defaults, template = 'EventInfos', container = 'div' } = {}) {
-        const control = await Control.build(template, infos, container)
-        return new EventInfos(control, infos)
-    }
-    constructor(control, infos) {
+    constructor(control, eventData) {
         this.control = control
         this.container = control.container
-        this.infos = infos
+        this.eventData = eventData
     }
     async render(eventData) {
-        const data = Object.assign({}, EventInfos.defaults, this.infos, eventData)
+        const data = Object.assign({}, EventData.Defaults, this.eventData, eventData)
         const html = await this.control.render(data)
         return html
     }

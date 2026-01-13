@@ -17,6 +17,7 @@ export class Control {
         this.template = template
         this.data = data
         this.container = container
+        // events
         for (const event of events) {
             this.container.addEventListener(event, function (event) {
                 const { target } = event
@@ -59,8 +60,12 @@ export class Control {
             body: JSON.stringify(data)
         })
         if (!resp.ok) {
-            const errorText = await resp.text()
-            throw new Error(`Failed to fetch ${url.pathname}: ${resp.statusText} - ${errorText}.`)
+            const errorHtml = await resp.text()
+            const error = document.createElement('div')
+            error.innerHTML = errorHtml
+            const pre = error.querySelector('pre')
+            throw new Error(`Failed to fetch ${url.pathname}\n${resp.statusText}\n${pre.innerText}`)
+            
         }
         const html = await resp.text()
         this.container.innerHTML = html
