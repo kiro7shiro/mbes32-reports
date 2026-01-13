@@ -5,33 +5,10 @@ import { EventInfos } from '../src/EventInfos.js'
 async function app() {
     // controls
     const menuBar = await Control.build('MenuBar', {}, '#menuBar', ['click', 'change'])
-    const mergeFiles = await Control.build('MergeFiles', {}, '#mergeFiles', ['click', 'change'])
-    const [labelFile1, labelFile2] = document.querySelectorAll('#mergeFiles input[type="text"]')
-    mergeFiles.files = []
-    mergeFiles.hide()
     // events
     menuBar.on('aboutClick', function (event) {
         window.alert('kiro7shiro 2026')
     })
-    menuBar.on('mergeFiles', mergeFiles.show.bind(mergeFiles))
-    mergeFiles.on('close', mergeFiles.hide.bind(mergeFiles))
-    mergeFiles.on('cancel', mergeFiles.hide.bind(mergeFiles))
-    mergeFiles.on('file1', function (event) {
-        const [file] = event.detail.files
-		console.log(file)
-        labelFile1.value = file.name
-		mergeFiles.files.push(file)
-    })
-    mergeFiles.on('file2', function (event) {
-        const [file] = event.detail.files
-		console.log(file)
-        labelFile2.value = file.name
-		mergeFiles.files.push(file)
-    })
-    mergeFiles.on('ok', function (event) {
-		console.log(mergeFiles)
-	})
-
     const eventInfos = await EventInfos.build({ container: '#eventInfos' })
     const resp = await fetch(new URL('data', window.origin))
     const eventsData = (await resp.json()).map((d) => new EventData(d))
@@ -50,6 +27,10 @@ async function app() {
             return data.id === id
         })
         console.log(eventData)
+        const resp = await fetch(new URL(`data/files/${eventData.matchcode}`, window.origin))
+        const { files } = await resp.json()
+        console.log(files)
+        eventData.files = files
         await eventInfos.render(eventData)
     })
     window.app = { ganttChart, eventInfos, mergeFiles }
