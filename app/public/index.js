@@ -5,9 +5,23 @@ import { EventInfos } from '../src/EventInfos.js'
 async function app() {
     // controls
     const menuBar = await Control.build('MenuBar', {}, '#menuBar', ['click', 'change'])
+    const mergeFiles = await Control.build('MergeFiles', {}, '#mergeFiles')
     // events
-    menuBar.on('aboutClick', function (event) {
+    menuBar.on('aboutClick', function () {
         window.alert('kiro7shiro 2026')
+    })
+    mergeFiles.on('addFile', function (event) {
+        console.log(event)
+        const input = document.createElement('input')
+        input.type = 'file'
+
+        input.onchange = (e) => {
+            const file = e.target.files[0]
+            console.log(file)
+            console.log(file.mozFullPath)
+        }
+
+        input.click()
     })
     const eventInfos = await EventInfos.build({ container: '#eventInfos' })
     const resp = await fetch(new URL('data', window.origin))

@@ -1,26 +1,17 @@
 #mergeFiles {
-    width: 500px;
-    height: fit-content;
-    position: absolute;
-    left: 35%;
-    top: 40%;
-    padding-top: 0px;
-}
-
-#mergeFiles input[type='file'] {
-    display: none;
-}
-
-#mergeFiles label {
-    display: inline-block;
-    cursor: pointer;
-}
-
-.event-infos {
     border-radius: 8px;
     overflow: hidden;
 }
-.event-todos {
+
+#mergeFiles li::marker {
+  content: "+";
+}
+
+#eventInfos {
+    border-radius: 8px;
+    overflow: hidden;
+}
+#evenTodos {
     border-radius: 8px;
     overflow: hidden;
 }

@@ -3,9 +3,9 @@ const path = require('path')
 const express = require('express')
 
 const app = express()
+const templates = require('templates')({ views: path.resolve(__dirname, 'views') })
 app.use(express.json())
-app.set('view engine', 'ejs')
-app.set('views', path.resolve(__dirname, 'views'))
+app.use(templates)
 app.locals.settings = {
     eventsFile: path.resolve(__dirname, '../data/events.xlsx'),
     eventsConfig: path.resolve(__dirname, '../data/eventsConfig.json'),
@@ -29,7 +29,6 @@ app.locals.settings = {
 }
 app.use('/src', express.static(path.resolve(__dirname, 'src')))
 app.use('/data', require('../api/data.js'))
-app.use('/controls', require('../api/controls.js'))
 app.use(express.static(path.resolve(__dirname, 'public')))
 app.use(express.static(path.resolve(__dirname, '../node_modules/frappe-gantt/dist')))
 
