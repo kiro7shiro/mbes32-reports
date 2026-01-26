@@ -36,6 +36,7 @@ class Defaults {
         return data.reduce(function (result, obj) {
             if (!Object.hasOwn(obj, 'dates') || obj.dates.length < 1) return result
             const startDiff = (obj.dates[0] - startDate) / days
+            console.log({ date: obj.dates[0], startDiff })
             const patStart = new Array(startDiff).fill('')
             const patGaps = []
             for (let dCnt = 0; dCnt < obj.dates.length - 1; dCnt++) {

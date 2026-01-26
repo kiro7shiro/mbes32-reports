@@ -1,0 +1,19 @@
+{
+    "sheetName": "events",
+    "type": "list",
+    "row": 1,
+    "columns": [
+        { "index": 4, "key": "matchcode" },
+        { "index": 5, "key": "name" },
+        { "index": 6, "key": "start" },
+        { "index": 7, "key": "setup" },
+        { "index": 8, "key": "eventStart" },
+        { "index": 9, "key": "eventEnd" },
+        { "index": 10,"key": "dismantle" },
+        { "index": 11,"key": "end" },
+        { "index": 12,"key": "status" },
+        { "index": 13, "key": "account" },
+        { "index": 14, "key": "type" },
+        { "index": 15, "key": "kind" }
+    ]
+}

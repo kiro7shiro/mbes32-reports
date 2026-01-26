@@ -1,2 +1,3 @@
 - [ ] write a update function for eventsData
 - [ ] integrate eventTodos
+- [ ] rename project to mbes

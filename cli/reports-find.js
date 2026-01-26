@@ -13,7 +13,7 @@ const directoriesEngine = { ...Defaults.directoriesEngine }
 const filesEngine = { ...Defaults.filesEngine }
 
 program.addOption(
-    new Option('-sp, --searchPath <searchPath>', 'The path to search the folders in.')
+    new Option('-sp, --search-path <searchPath>', 'The path to search the folders in.')
         .argParser(function (value) {
             return path.resolve(process.cwd(), value)
         })
@@ -32,7 +32,7 @@ program.addOption(
         .argParser(function (value) {
             return value.split(' ')
         })
-        .default(savedOptions.blacklist.split(' '))
+        .default(savedOptions.blacklist)
 )
 program.addOption(
     new Option('-td, --threshold-directories <thresholdDirectories>', 'Threshold for directories search engine.')
@@ -57,9 +57,9 @@ program.parse()
 const query = program.processedArgs[0]
 const options = program.opts()
 
-/* console.log(directoriesEngine)
+console.log(directoriesEngine)
 console.log(filesEngine)
-console.log(options) */
+console.log(options)
 
 const { searchPath, filesQuery, blacklist, report } = options
 

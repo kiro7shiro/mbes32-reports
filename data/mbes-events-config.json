@@ -15,8 +15,6 @@
         { "index": 10, "key": "type" },
         { "index": 11, "key": "kind" },
         { "index": 12, "key": "account" },
-        { "index": 13, "key": "manager" },
-        { "index": 14, "key": "espk" },
-        { "index": 15,"key": "halls" }
+        { "index": 13, "key": "manager" }
     ]
 }

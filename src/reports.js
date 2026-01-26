@@ -96,7 +96,7 @@ function findFiles(
     // take the first found item as the requested directory
     const foundDirectory = findDirectories[0].item
     console.log(`searching in directory: ${foundDirectory} ...`)
-    const files = listFiles(path.join(searchPath, foundDirectory), { blacklist })
+    const files = listFiles(path.resolve(searchPath, foundDirectory), { blacklist })
     if (files.length === 0) throw new Errors.DirectoryEmpty(foundDirectory)
     // search for files
     if (filesQuery === '') {
@@ -112,7 +112,9 @@ function findFiles(
         return accu
     }, [])
     const searchFiles = new Fuse(queryStrings, filesEngine)
-    const findFiles = searchFiles.search(filesQuery).map(function (file) {
+    let findFiles = searchFiles.search(filesQuery)
+    console.table(findFiles.map(f => { return { score: f.score, ...f.item } }), ['filename', 'score', 'queryString'])
+    findFiles = findFiles.map(function (file) {
         return {
             filename: file.item.filename,
             filepath: file.item.filepath,
