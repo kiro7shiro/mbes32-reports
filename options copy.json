@@ -1,0 +1,43 @@
+{
+    "reports-list": {
+        "listFile": "../data/list.xlsx",
+        "listConfig": "../data/list-config.js",
+        "searchPath": "../test/data",
+        "subPath": ["009_Reinigung und Entsorgung", "Kalkulation"],
+        "dirsBlacklist": [
+            "00_Ordnerstruktur ES_VA-Produktion",
+            "001_MBPro",
+            "01_ES_Kosteninformation_intern",
+            "002_Anfragen",
+            "003_Vorlagen",
+            "004_Informationen der Fachabteilungen"
+        ],
+        "blacklist": ["Archiv", "ARCHIV"]
+    },
+    "reports-extract": {
+        "report": "../data/extract.xlsx",
+        "listConfig": "../data/list-config.js",
+        "reportConfig": "../data/extract-report.js",
+        "filesConfig": "../data/mbes-meta-config.js",
+        "conBlacklist": ["ALBA", "CWS"]
+    },
+    "reports-find": {
+        "searchPath": "../test/data",
+        "report": "../test/report.xlsx",
+        "blacklist": "Archiv"
+    },
+    "reports-find-many": {
+        "searchPath": "../test/data",
+        "report": "../test/report.xlsx",
+        "blacklist": "Archiv"
+    },
+    "reports-start": {
+        "port": 5500
+    },
+    "reports-update": {
+        "source": "../data/TPK-Liste mit ESPK.xlsx",
+        "sourceConfig": "../data/eventsDataConfig.json",
+        "destination": "../data/events.xlsx",
+        "destinationConfig": "../data/eventsConfig.json"
+    }
+}

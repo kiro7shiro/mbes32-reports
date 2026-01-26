@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { Command, Argument, Option } = require('commander')
+const { 'reports-list': savedOptions } = require('../options.json')
 const { listFiles } = require('../src/listFiles.js')
 const { EventFile } = require('../src/EventFile.js')
 const { analyze, parse, serialize } = require('xlsx-fuzzyparser')
@@ -14,39 +15,39 @@ const program = new Command()
 program.description('List mbes files of a given year.')
 
 program.addArgument(new Argument('<year>', 'The year to search files for.'))
-program.addArgument(new Argument('[listFile]', 'The file to save the list to.').default(path.resolve(__dirname, '../data/list.xlsx')))
+program.addArgument(new Argument('[listFile]', 'The file to save the list to.').default(path.resolve(__dirname, savedOptions.listFile)))
 program.addArgument(
     new Argument('[listConfig]', 'The config of the list file.')
         .argParser(parseConfigFile)
-        .default(parseConfigFile(path.resolve(__dirname, '../data/list-config.js')))
+        .default(parseConfigFile(path.resolve(__dirname, savedOptions.listConfig)))
 )
 program.addOption(
     new Option('-sp, --search-path <searchPath>', 'The path to search the files in.')
         .argParser(function (value) {
             return path.resolve(process.cwd(), value)
         })
-        .default(path.resolve("C:\\Users\\tiedemann\\Messe Berlin GmbH\\Event Services - Veranstaltungsproduktion"))
+        .default(path.resolve(process.cwd(), savedOptions.searchPath))
 )
 program.addOption(
     new Option('-sb, --sub-path <subPath>', 'Sub pathes of mbes standard directory structure to find the files in.')
         .argParser(function (value) {
             return value.split(' ')
         })
-        .default(['009_Reinigung und Entsorgung', 'Kalkulation'])
+        .default(savedOptions.subPath)
 )
 program.addOption(
     new Option('-db, --dirs-blacklist <dirsBlacklist>', 'List of directories to exclude from the search of event directories.')
         .argParser(function (value) {
             return value.split(' ')
         })
-        .default(['00_Ordnerstruktur ES_VA-Produktion', '001_MBPro', '01_ES_Kosteninformation_intern', '002_Anfragen', '003_Vorlagen', '004_Informationen der Fachabteilungen'])
+        .default(savedOptions.dirsBlacklist)
 )
 program.addOption(
     new Option('-b, --blacklist <blacklist>', 'List of sub directories to exclude from the search of files.')
         .argParser(function (value) {
             return value.split(' ')
         })
-        .default(['Archiv', 'ARCHIV'])
+        .default(savedOptions.blacklist)
 )
 
 program.parse()

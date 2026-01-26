@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { Command, Argument, Option } = require('commander')
+const { 'reports-extract': savedOptions } = require('../options.json')
 const { analyze, parse, serialize } = require('xlsx-fuzzyparser')
 
 function parseConfigFile(value) {
@@ -11,39 +12,38 @@ function parseConfigFile(value) {
 const program = new Command()
 program.description('Extract date from a list of mbes files.')
 program.addArgument(
-    new Argument('<list>', 'The file containing a list of mbes files.')
-        .argParser(function (value) {
-            return path.resolve(process.cwd(), value)
-        })
+    new Argument('<list>', 'The file containing a list of mbes files.').argParser(function (value) {
+        return path.resolve(process.cwd(), value)
+    })
 )
 program.addArgument(
     new Argument('[report]', 'The file to write the extracted data to.')
         .argParser(function (value) {
             return path.resolve(process.cwd(), value)
         })
-        .default(path.resolve(__dirname, '../data/extract.xlsx'))
+        .default(path.resolve(__dirname, savedOptions.report))
 )
 program.addOption(
     new Option('-lc, --list-config <listConfig>', 'The config of the list file.')
         .argParser(parseConfigFile)
-        .default(parseConfigFile(path.resolve(__dirname, '../data/list-config.js')))
-)
-program.addOption(
-    new Option('-fc, --files-config <filesConfig>', 'The config of the files in the list.')
-        .argParser(parseConfigFile)
-        .default(parseConfigFile(path.resolve(__dirname, '../data/mbes-meta-config.js')))
+        .default(parseConfigFile(path.resolve(__dirname, savedOptions.listConfig)))
 )
 program.addOption(
     new Option('-rc, --report-config <reportConfig>', 'The config of the report file.')
         .argParser(parseConfigFile)
-        .default(parseConfigFile(path.resolve(__dirname, '../data/extract-report.js')))
+        .default(parseConfigFile(path.resolve(__dirname, savedOptions.reportConfig)))
+)
+program.addOption(
+    new Option('-fc, --files-config <filesConfig>', 'The config of the files in the list.')
+        .argParser(parseConfigFile)
+        .default(parseConfigFile(path.resolve(__dirname, savedOptions.filesConfig)))
 )
 program.addOption(
     new Option('-cb, --con-blacklist <conBlacklist>', 'List of contractors to exclude.')
         .argParser(function (value) {
             return value.split(' ')
         })
-        .default(['ALBA', 'CWS'])
+        .default(savedOptions.conBlacklist)
 )
 
 program.parse()
@@ -59,8 +59,8 @@ async function main() {
     const directories = await parse(list, options.listConfig.directories)
     //console.table(directories)
     const temp = []
-    for (let dCnt = 0; dCnt < 4 /* directories.length */; dCnt++) {
-        const { directory } = directories[dCnt];
+    for (let dCnt = 0; dCnt < 1 /* directories.length */; dCnt++) {
+        const { directory } = directories[dCnt]
         const basename = path.basename(directory)
         console.log(basename)
         const config = Object.assign({}, options.listConfig.files, { sheetName: basename })
@@ -102,12 +102,13 @@ async function main() {
         // extract data from last modified files
         const fileData = []
         for (let fCnt = 0; fCnt < lastModified.length; fCnt++) {
-            const file = lastModified[fCnt];
-            const [data] = await parse(file.filepath + file.filename, options.filesConfig)
+            const file = lastModified[fCnt]
+            const data = await parse(file.filepath + file.filename, options.filesConfig)
+            console.log(data.Hallen)
             // TODO : find event data in mbes-events.xlsx
             // TODO : validate matchcode of files
             //fileData.push(data)
-            Object.assign(file, data)
+            //Object.assign(file, data)
             //file.data = data
         }
         //console.log(fileData)
@@ -118,9 +119,6 @@ async function main() {
         const dataConfig = Object.assign({}, options.reportConfig.fileData, { sheetName: basename })
         await serialize(fileData, report, { config: dataConfig })
     }
-
-
-
 }
 
 main()
